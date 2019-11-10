@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Event Manager</string>
+    <string name="Button">Select Event</string>
+    <string name="Reminder">Reminder</string>
+    <string name="MyEvent">My Event</string>
+    <string name="AllEvent">All Event</string>
+
+    <string-array name="reminder_arrays">
+        <item>none</item>
+        <item>15 minutes</item>
+        <item>30</item>
+        <item>1 hours</item>
+        <item>1 days</item>
+        <item>1 week</item>
+        <item>1 month</item>
+        <item>1 year</item>
+    </string-array>
+
+    <string-array name="time_arrays">
+        <item>12:00 AM</item>
+        <item>12:30 AM</item>
+        <item>1:00 AM</item>
+        <item>1:30 AM</item>
+        <item>2:00 AM</item>
+        <item>2:30 AM</item>
+        <item>3:00 AM</item>
+        <item>3:30 AM</item>
+    </string-array>
+
+</resources>
