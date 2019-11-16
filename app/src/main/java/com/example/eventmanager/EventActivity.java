@@ -114,4 +114,14 @@ public class EventActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+
+        AutoCompleteTextView textView = (AutoCompleteTextView)  findViewById(R.id.autocomplete_country);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_item, COUNTRIES);
+        textView.setAdapter(adapter);
+    }
 }
