@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFE5295"
+    android:padding="20dp"
+    tools:context=".EventSelection">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:id="@+id/EditsaveButton"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textAllCaps="false"/>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Details"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="5dp"/>
+    <EditText
+        android:id="@+id/EditEventNameId"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:hint="Event name"
+        />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/EditGoogleMapId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Google Map"
+        android:textAllCaps="false"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"/>
+
+    <EditText
+        android:id="@+id/EditlocationId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Location"
+        android:layout_marginTop="10dp"
+        />
+
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/EditStartTimeId"
+            android:layout_width="250dp"
+            android:hint="Event Date"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            />
+
+        <Spinner
+            android:id="@+id/Editspinner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/time_arrays"
+            android:tooltipText=""
+            />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/EditdescriptionId"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Description"
+        android:layout_marginTop="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <ImageView
+            android:id="@+id/EditimageViewId"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_weight="3"
+            android:layout_marginRight="10dp"
+
+            />
+        <Button
+            android:id="@+id/EditsetImageButtonId"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:text="Set Image"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:layout_gravity="center"
+
+            />
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

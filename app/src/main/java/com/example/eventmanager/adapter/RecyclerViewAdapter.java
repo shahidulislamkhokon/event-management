@@ -3,6 +3,7 @@ package com.example.eventmanager.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventmanager.Edit;
 import com.example.eventmanager.R;
 import com.example.eventmanager.models.Event;
 import com.example.eventmanager.viewholder.ViewHolder;
@@ -39,6 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
         viewHolder.setOnClickListener(new ClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+
                 gotoViewEventFragment(events.get(position));
             }
         });
@@ -67,6 +70,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
         holder.startTime.setText(event.getTimeSpinner() == null ? "" : event.getTimeSpinner());
         holder.eventLocation.setText(event.getLocation() == null ? "" : event.getLocation());
         holder.eventDate.setText(event.getStartingDate() == null ? "" : event.getStartingDate().toString());
+
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, Edit.class);
+                context.startActivity(i);
+            }
+        });
     }
 
     @Override

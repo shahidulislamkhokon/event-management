@@ -86,7 +86,7 @@ public class EventActivity extends AppCompatActivity {
 
         StringBuilder stringBuilder=new StringBuilder();
 
-        stringBuilder.append("Current Date: ");
+        stringBuilder.append("Go to the Event page: ");
         stringBuilder.append(datePicker.getDayOfMonth()+"/");
         stringBuilder.append((datePicker.getMonth()+1)+"/");
         stringBuilder.append(datePicker.getYear());

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Event Manager</string>
-    <string name="Button">Select Event</string>
+    <string name="Button">Create Event</string>
+    <string name="Select_Button">Select Date</string>
     <string name="Reminder">Reminder</string>
     <string name="MyEvent">My Event</string>
     <string name="AllEvent">All Event</string>

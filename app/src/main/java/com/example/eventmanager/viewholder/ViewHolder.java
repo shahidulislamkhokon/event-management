@@ -14,7 +14,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public TextView title, startTime,eventDate, eventLocation;
     public ImageView eventImage;
-    private Button deleteButton, editButton;
+    public Button deleteButton, editButton;
 
     public ViewHolder(View itemView) {
         super(itemView);
@@ -31,6 +31,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         eventLocation = (TextView) itemView.findViewById(R.id.locationId);
         eventDate = (TextView) itemView.findViewById(R.id.eventDate);
         eventImage = (ImageView) itemView.findViewById(R.id.imageview);
+        editButton = (Button) itemView.findViewById(R.id.editButton);
     }
 
     private ClickListener mClickListener;
