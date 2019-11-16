@@ -22,7 +22,7 @@
             android:id="@+id/saveButton"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:textAllCaps="true"/>
+            android:textAllCaps="false"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -82,12 +82,40 @@
     <EditText
         android:id="@+id/descriptionId"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:hint="Description"
-        android:gravity="center"
-        android:textStyle="bold"
         android:layout_marginTop="10dp"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <ImageView
+            android:id="@+id/imageViewId"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_weight="3"
+            android:layout_marginRight="10dp"
+
+            />
+        <Button
+            android:id="@+id/setImageButtonId"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Set Image"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:layout_gravity="center"
+
+            />
+
+
+    </LinearLayout>
 
 
 

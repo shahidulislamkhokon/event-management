@@ -15,6 +15,7 @@
         android:inputType="textEmailAddress"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:hint="Email"
+        android:text="khokon@gmail.com"
         android:textColorHint="#ffffff"
         android:textColor="#ffffff"
         />
@@ -27,6 +28,7 @@
         android:inputType="textPassword"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:hint="Password"
+        android:text="1234567"
         android:textColorHint="#ffffff"
         android:textColor="#ffffff"
         />
