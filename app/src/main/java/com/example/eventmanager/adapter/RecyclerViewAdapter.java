@@ -8,13 +8,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.Edit;
+import com.example.eventmanager.EventActivity;
+import com.example.eventmanager.EventSelection;
+import com.example.eventmanager.MainActivity;
+import com.example.eventmanager.MyEvent;
 import com.example.eventmanager.R;
 import com.example.eventmanager.models.Event;
 import com.example.eventmanager.viewholder.ViewHolder;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -42,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
             @Override
             public void onItemClick(View view, int position) {
 
-                gotoViewEventFragment(events.get(position));
+                gotoViewEvent(events.get(position));
             }
         });
 
@@ -50,7 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
         return viewHolder;
     }
 
-    private void gotoViewEventFragment(Event event){
+    private void gotoViewEvent(Event event){
 
     }
 
@@ -80,7 +90,40 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
                 context.startActivity(i);
             }
         });
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteEvent(event);
+            }
+        });
     }
+
+    private void deleteEvent(Event event) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users/"+ EventActivity.firebaseUser.getUid()+"/events/"+event.getKey());
+        ref.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+                Toast.makeText(context, "Event is deleted.",
+                        Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(context, MyEvent.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+
+
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error!! Try Again ",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     @Override
     public int getItemCount() {

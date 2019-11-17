@@ -32,6 +32,8 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         eventDate = (TextView) itemView.findViewById(R.id.eventDate);
         eventImage = (ImageView) itemView.findViewById(R.id.imageview);
         editButton = (Button) itemView.findViewById(R.id.editButton);
+        deleteButton=(Button) itemView.findViewById(R.id.deleteButtonId);
+
     }
 
     private ClickListener mClickListener;

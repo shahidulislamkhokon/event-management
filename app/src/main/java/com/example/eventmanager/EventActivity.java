@@ -23,7 +23,7 @@ public class EventActivity extends AppCompatActivity {
     private TextView textView;
     private Button button, goEventButton,myEventButton,allEventButton;
     private FirebaseAuth mAuth;
-    static FirebaseUser firebaseUser;
+    public static FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
