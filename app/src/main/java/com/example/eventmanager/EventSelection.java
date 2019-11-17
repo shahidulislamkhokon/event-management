@@ -2,10 +2,15 @@ package com.example.eventmanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shivtechs.maplocationpicker.LocationPickerActivity;
+import com.shivtechs.maplocationpicker.MapUtility;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -33,7 +40,7 @@ import java.util.GregorianCalendar;
 
 public class EventSelection extends AppCompatActivity {
 
-    private Button save, setImageButton;
+    private Button save, setImageButton,googleButton;
     private ImageView setImageView;
     private EditText editTextEvent, editTextLocation, editTextStart, editTextDescription;
     private Spinner spinnerReminder, spinnerStart;
@@ -46,6 +53,8 @@ public class EventSelection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_selection);
 
+        MapUtility.apiKey = getResources().getString(R.string.google_api_key);
+
         String date = getIntent().getExtras().getString("currentDate");
 
         save=findViewById(R.id.saveButton);
@@ -55,9 +64,9 @@ public class EventSelection extends AppCompatActivity {
         editTextStart=findViewById(R.id.StartTimeId);
         spinnerStart=findViewById(R.id.spinner2);
         setImageView=findViewById(R.id.imageViewId);
+        googleButton=findViewById(R.id.googleMapId);
 
         editTextStart.setText(date);
-        //editTextEnd=findViewById(R.id.endTimeId);
         editTextDescription=findViewById(R.id.descriptionId);
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +83,15 @@ public class EventSelection extends AppCompatActivity {
                 chooseImage();
             }
         });
+
+        //google Button
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentPlaceItems();
+            }
+        });
+
     }
 
     private void chooseImage() {
@@ -81,6 +99,37 @@ public class EventSelection extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 71);
+    }
+
+    private void getCurrentPlaceItems() {
+        if (isLocationAccessPermitted()) {
+            showPlacePicker();
+        } else {
+            requestLocationAccessPermission();
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void showPlacePicker() {
+        Intent i = new Intent(getApplicationContext(), LocationPickerActivity.class);
+        startActivityForResult(i, 1020);
+
+    }
+
+    private boolean isLocationAccessPermitted() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void requestLocationAccessPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
     }
 
 
@@ -92,15 +141,19 @@ public class EventSelection extends AppCompatActivity {
 
 
 
-            ref.setValue(new Event(editTextEvent.getText().toString(),editTextLocation.getText().toString(),editTextStart.getText().toString(),String.valueOf(spinnerStart.getSelectedItem()) ,editTextDescription.getText().toString(),"No"))
+            ref.setValue(new Event(editTextEvent.getText().toString(),editTextLocation.getText().toString(),editTextStart.getText().toString(),spinnerStart.getSelectedItemPosition() ,editTextDescription.getText().toString(),"No"))
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                            if(filePath!=null)
                            {saveImage(ref);}
 
+
                            else{ Toast.makeText(getApplicationContext(), "Event is added.",
-                                    Toast.LENGTH_SHORT).show();}
+                                    Toast.LENGTH_SHORT).show();
+                               Intent intent=new Intent(getApplicationContext(),MyEvent.class);
+                               startActivity(intent);
+                           }
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -130,6 +183,20 @@ public class EventSelection extends AppCompatActivity {
             }
         }
 
+        if (requestCode == 1020) {
+            try {
+                if (data != null && data.getStringExtra(MapUtility.ADDRESS) != null) {
+                    String address = data.getStringExtra(MapUtility.ADDRESS);
+                    double currentLatitude = data.getDoubleExtra(MapUtility.LATITUDE, 0.0);
+                    double currentLongitude = data.getDoubleExtra(MapUtility.LONGITUDE, 0.0);
+                    editTextLocation.setText(address);
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     private void saveImage(final DatabaseReference ref) {
@@ -139,9 +206,6 @@ public class EventSelection extends AppCompatActivity {
             storage = FirebaseStorage.getInstance("gs://event-manager-4feb6.appspot.com");
             storageReference = storage.getReference();
 
-            //final ProgressDialog progressDialog = new ProgressDialog(getApplicationContext());
-           // progressDialog.setTitle("Uploading...");
-           // progressDialog.show();
 
             final StorageReference sRef = storageReference.child("images/"+ ref.getKey());
             sRef.putFile(filePath)

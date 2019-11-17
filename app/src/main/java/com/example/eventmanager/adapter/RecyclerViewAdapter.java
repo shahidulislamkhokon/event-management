@@ -57,7 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Event event = events.get(position);
+        final Event event = events.get(position);
         try{
             Picasso.get().load(event.getSaveEventImage()).into(holder.eventImage);
         }catch (Exception ex)
@@ -67,7 +67,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
 
         holder.title.setText(event.getEventName() == null ? "" : event.getEventName());
-        holder.startTime.setText(event.getTimeSpinner() == null ? "" : event.getTimeSpinner());
+        holder.startTime.setText(context.getResources().getStringArray(R.array.time_arrays)[event.getTimeSpinnerposition()]);
         holder.eventLocation.setText(event.getLocation() == null ? "" : event.getLocation());
         holder.eventDate.setText(event.getStartingDate() == null ? "" : event.getStartingDate().toString());
 
@@ -75,6 +75,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, Edit.class);
+                i.putExtra("event",event);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }

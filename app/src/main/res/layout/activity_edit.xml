@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
-            android:id="@+id/EditStartTimeId"
+            android:id="@+id/EditEventDateId"
             android:layout_width="250dp"
             android:hint="Event Date"
             android:layout_height="wrap_content"
@@ -68,11 +68,11 @@
             />
 
         <Spinner
-            android:id="@+id/Editspinner2"
+            android:id="@+id/Editspinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/time_arrays"
-            android:tooltipText=""
+
             />
     </LinearLayout>
 

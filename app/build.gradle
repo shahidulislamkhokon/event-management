@@ -6,7 +6,7 @@ android {
     buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "com.example.eventmanager"
-        minSdkVersion 16
+        minSdkVersion 22
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -33,5 +33,11 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.shivpujan12:LocationPicker:v1.2'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    implementation 'com.google.android.libraries.places:places:2.0.0'
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

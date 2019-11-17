@@ -27,5 +27,6 @@
         <item>3:00 AM</item>
         <item>3:30 AM</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

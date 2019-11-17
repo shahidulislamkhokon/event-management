@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.shivtechs.maplocationpicker.LocationPickerActivity;
+import com.shivtechs.maplocationpicker.MapUtility;
 
 public class EventActivity extends AppCompatActivity {
 
@@ -27,6 +29,8 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
+
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -46,6 +50,7 @@ public class EventActivity extends AppCompatActivity {
         goEventButton=findViewById(R.id.goEventButton);
         myEventButton=findViewById(R.id.MyEventId);
         allEventButton=findViewById(R.id.AllEvent);
+
 
         goEventButton.setText(currentDate());
         myEventButton.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +91,7 @@ public class EventActivity extends AppCompatActivity {
 
         StringBuilder stringBuilder=new StringBuilder();
 
-        stringBuilder.append("Go to the Event page: ");
+        stringBuilder.append("Event Date: ");
         stringBuilder.append(datePicker.getDayOfMonth()+"/");
         stringBuilder.append((datePicker.getMonth()+1)+"/");
         stringBuilder.append(datePicker.getYear());
