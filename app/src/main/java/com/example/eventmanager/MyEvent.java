@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.SearchView;
 
 import com.example.eventmanager.adapter.RecyclerViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MyEvent extends AppCompatActivity {
 
+    SearchView searchView;
+
     RecyclerView mRecyclerView;
     RecyclerView.Adapter adapter;
 
@@ -40,6 +43,8 @@ public class MyEvent extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
 
+        searchView = findViewById(R.id.searchViewId);
+
         //set layout as LinearLayout
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -50,6 +55,41 @@ public class MyEvent extends AppCompatActivity {
         mRef = mFirebaseDatabase.getReference("users").orderByKey().equalTo(EventActivity.firebaseUser.getUid());
 
 
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                List<Event> filteredEvent = new ArrayList<>();
+                if(query==null || query.equals(""))
+                {
+                    filteredEvent.addAll(events);
+                }
+                else{
+                    for (Event e : events) {
+                        if(e.getEventName().toLowerCase().contains(query.toLowerCase())){
+                            filteredEvent.add(e);
+                        }
+                    }
+                }
+                adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                mRecyclerView.setAdapter(adapter);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText==null || newText.equals(""))
+                {
+                    List<Event> filteredEvent = new ArrayList<>();
+                    filteredEvent.addAll(events);
+                    adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                    mRecyclerView.setAdapter(adapter);
+                }
+                return false;
+            }
+
+
+        });
 
 
         //Get List

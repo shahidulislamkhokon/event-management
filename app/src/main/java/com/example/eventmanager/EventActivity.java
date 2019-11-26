@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +25,7 @@ public class EventActivity extends AppCompatActivity {
     private Button button, goEventButton,myEventButton,allEventButton;
     private FirebaseAuth mAuth;
     public static FirebaseUser firebaseUser;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class EventActivity extends AppCompatActivity {
         goEventButton=findViewById(R.id.goEventButton);
         myEventButton=findViewById(R.id.MyEventId);
         allEventButton=findViewById(R.id.AllEvent);
+        searchView=findViewById(R.id.searchViewId);
+
+
 
 
         goEventButton.setText(currentDate());

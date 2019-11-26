@@ -134,7 +134,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
         {
             holder.editButton.setVisibility(View.GONE);
             holder.deleteButton.setVisibility(View.GONE);
-            holder.shareButton.setVisibility(View.GONE);
+            //holder.shareButton.setVisibility(View.GONE);
         }
     }
 

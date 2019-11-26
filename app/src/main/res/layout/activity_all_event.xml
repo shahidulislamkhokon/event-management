@@ -8,9 +8,25 @@
     tools:context=".AllEvent"
     android:background="@drawable/bg">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <SearchView
+            android:id="@+id/searchViewId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search event"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+
+
+
+
     <!--RecyclerView-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>

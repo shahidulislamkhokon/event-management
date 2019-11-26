@@ -3,7 +3,7 @@ package com.example.eventmanager.models;
 import java.io.Serializable;
 
 public class Event implements Serializable {
-    private String key, eventName, location, startingDate, description, saveEventImage,eventAddedBy;
+    private String key, eventName, location, startingDate, description, saveEventImage,eventAddedBy,like;
     private int timeSpinnerposition;
 
     public Event() {

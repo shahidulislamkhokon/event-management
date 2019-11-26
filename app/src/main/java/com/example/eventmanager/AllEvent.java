@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.SearchView;
 
 import com.example.eventmanager.adapter.RecyclerViewAdapter;
 import com.example.eventmanager.models.Event;
@@ -21,7 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
+
 public class  AllEvent extends AppCompatActivity {
+
+    SearchView searchView;
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter adapter;
@@ -38,7 +45,66 @@ public class  AllEvent extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
 
-        //set layout as LinearLayout
+        searchView = findViewById(R.id.searchViewId);
+
+//        searchView.setOnSearchClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                List<Event> filteredEvent = new ArrayList<>();
+//                for (Event e : events) {
+//                    if(e.getEventName().contains(searchView.getQuery())){
+//                        filteredEvent.add(e);
+//                    }
+//                }
+//                adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+//                mRecyclerView.setAdapter(adapter);
+//
+//            }
+//        });
+
+
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                List<Event> filteredEvent = new ArrayList<>();
+                if(query==null || query.equals(""))
+                {
+                    filteredEvent.addAll(events);
+                }
+                else{
+                    for (Event e : events) {
+                        if(e.getEventName().toLowerCase().contains(query.toLowerCase())){
+                            filteredEvent.add(e);
+                        }
+                    }
+                }
+                adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                mRecyclerView.setAdapter(adapter);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText==null || newText.equals(""))
+                {
+                    List<Event> filteredEvent = new ArrayList<>();
+                    filteredEvent.addAll(events);
+                    adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                    mRecyclerView.setAdapter(adapter);
+                }
+                return false;
+            }
+
+
+        });
+
+
+
+
+
+    //set layout as LinearLayout
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //send Query to FirebaseDatabase
@@ -78,6 +144,11 @@ public class  AllEvent extends AppCompatActivity {
         });
 
     }
+
+    private void SearchEvent(){
+
+    }
+
 
 }
 
