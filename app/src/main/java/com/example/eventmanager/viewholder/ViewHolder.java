@@ -2,6 +2,7 @@ package com.example.eventmanager.viewholder;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public TextView title, startTime,eventDate, eventLocation;
     public ImageView eventImage;
-    public Button deleteButton, editButton;
+    public Button deleteButton, editButton,shareButton,likeButton,commentButton;
 
     public ViewHolder(View itemView) {
         super(itemView);
@@ -33,6 +34,10 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         eventImage = (ImageView) itemView.findViewById(R.id.imageview);
         editButton = (Button) itemView.findViewById(R.id.editButton);
         deleteButton=(Button) itemView.findViewById(R.id.deleteButtonId);
+        shareButton= (Button) itemView.findViewById(R.id.shareButtonId);
+        likeButton=(Button) itemView.findViewById(R.id.likeButtonId);
+        commentButton=(Button) itemView.findViewById(R.id.commentButtonId);
+
 
     }
 

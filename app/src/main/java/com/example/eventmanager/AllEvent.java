@@ -5,9 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.eventmanager.adapter.RecyclerViewAdapter;
 import com.example.eventmanager.models.Event;
+import com.example.eventmanager.models.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AllEvent extends AppCompatActivity {
+public class  AllEvent extends AppCompatActivity {
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter adapter;
@@ -53,10 +55,13 @@ public class AllEvent extends AppCompatActivity {
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Map<String, Object> objectMap = (HashMap<String, Object>)
                             postSnapshot.getValue();
+                    //User user = postSnapshot.getValue(User.class);
                     if (objectMap.containsKey("events")) {
                         for (DataSnapshot eventSnap : postSnapshot.child("events").getChildren()) {
                             Event event = eventSnap.getValue(Event.class);
                             event.setKey(eventSnap.getKey());
+                            Log.d("ggg",postSnapshot.toString());
+                            event.setEventAddedBy( postSnapshot.getKey());
                             events.add(event);
                         }
                     }

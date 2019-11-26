@@ -4,6 +4,7 @@ package com.example.eventmanager.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import com.example.eventmanager.models.Event;
 import com.example.eventmanager.viewholder.ViewHolder;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -91,12 +94,48 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
             }
         });
 
+
+        holder.shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                //sendIntent.putExtra("event",event);
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, event.getEventName()+"\n"+event.getDescription()+"\n"+event.getLocation()+"\n"+event.getStartingDate()+"\n"+event.getSaveEventImage());
+                sendIntent.setType("text/plain");
+
+                Intent i = Intent.createChooser(sendIntent,"Share with");
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(i);
+            }
+        });
+
+
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteEvent(event);
             }
         });
+
+        holder.likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "You like the Event",Toast.LENGTH_SHORT).show();
+                v.setBackgroundColor(Color.GREEN);
+            }
+        });
+
+
+
+
+        if(!event.getEventAddedBy().equals(EventActivity.firebaseUser.getUid()))
+        {
+            holder.editButton.setVisibility(View.GONE);
+            holder.deleteButton.setVisibility(View.GONE);
+            holder.shareButton.setVisibility(View.GONE);
+        }
     }
 
     private void deleteEvent(Event event) {

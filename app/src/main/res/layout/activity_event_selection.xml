@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFE5295"
+    android:background="@drawable/bg"
     android:padding="20dp"
     tools:context=".EventSelection">
 
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:hint="Event name"
-        android:gravity="center"
+
         />
 <LinearLayout
     android:layout_width="match_parent"

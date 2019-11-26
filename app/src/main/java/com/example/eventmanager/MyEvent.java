@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.example.eventmanager.adapter.RecyclerViewAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,9 +43,14 @@ public class MyEvent extends AppCompatActivity {
         //set layout as LinearLayout
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //send Query to FirebaseDatabase
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mRef = mFirebaseDatabase.getReference("users");
+
+
+
+       mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mRef = mFirebaseDatabase.getReference("users").orderByKey().equalTo(EventActivity.firebaseUser.getUid());
+
+
+
 
         //Get List
 
@@ -59,6 +66,7 @@ public class MyEvent extends AppCompatActivity {
                         for (DataSnapshot eventSnap : postSnapshot.child("events").getChildren()) {
                             Event event = eventSnap.getValue(Event.class);
                             event.setKey(eventSnap.getKey());
+                            event.setEventAddedBy(EventActivity.firebaseUser.getUid());
                             events.add(event);
                         }
                     }

@@ -28,7 +28,7 @@
         android:inputType="textPassword"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:hint="Password"
-        android:text="1234567"
+        android:text="123456"
         android:textColorHint="#ffffff"
         android:textColor="#ffffff"
         />
