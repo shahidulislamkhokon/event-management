@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         setTitle("Sign In activity");
 
-        // Initialize Firebase Auth
+        // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
 
         email=findViewById(R.id.signInEmailEditTextId);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        //checking password
+        //check password
         if(passwordForSignUp.isEmpty()){
             password.setError("Enter your password");
             password.requestFocus();
