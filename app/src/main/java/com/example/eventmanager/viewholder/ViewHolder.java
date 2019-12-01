@@ -10,12 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventmanager.R;
 import com.example.eventmanager.adapter.ClickListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView title, startTime,eventDate, eventLocation;
+    public TextView title, startTime,eventDate, eventLocation,comments;
     public ImageView eventImage;
     public Button deleteButton, editButton,shareButton,likeButton,commentButton;
+
 
     public ViewHolder(View itemView) {
         super(itemView);
@@ -37,6 +40,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         shareButton= (Button) itemView.findViewById(R.id.shareButtonId);
         likeButton=(Button) itemView.findViewById(R.id.likeButtonId);
         commentButton=(Button) itemView.findViewById(R.id.commentButtonId);
+        comments=(TextView) itemView.findViewById(R.id.commentsTextId);
+
+
 
 
     }

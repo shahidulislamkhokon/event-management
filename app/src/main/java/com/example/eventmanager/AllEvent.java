@@ -80,7 +80,7 @@ public class  AllEvent extends AppCompatActivity {
                         }
                     }
                 }
-                adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent,AllEvent.this);
                 mRecyclerView.setAdapter(adapter);
                 return false;
             }
@@ -91,7 +91,7 @@ public class  AllEvent extends AppCompatActivity {
                 {
                     List<Event> filteredEvent = new ArrayList<>();
                     filteredEvent.addAll(events);
-                    adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                    adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent,AllEvent.this);
                     mRecyclerView.setAdapter(adapter);
                 }
                 return false;
@@ -126,13 +126,27 @@ public class  AllEvent extends AppCompatActivity {
                         for (DataSnapshot eventSnap : postSnapshot.child("events").getChildren()) {
                             Event event = eventSnap.getValue(Event.class);
                             event.setKey(eventSnap.getKey());
-                            Log.d("ggg",postSnapshot.toString());
                             event.setEventAddedBy( postSnapshot.getKey());
+                            List<String> likes = new ArrayList<>();
+                            for (DataSnapshot likeId : eventSnap.child("likes").getChildren()) {
+                                String likedUserId = likeId.getValue(String.class);
+                                likes.add(likedUserId);
+                            }
+                            event.setLikes(likes);
+
+                            List<String> comments = new ArrayList<>();
+                            for (DataSnapshot commentId : eventSnap.child("comments").getChildren()) {
+                                String commentsUserId = commentId.getValue(String.class);
+                                comments.add(commentsUserId);
+                            }
+                            event.setComments(comments);
+
+
                             events.add(event);
                         }
                     }
                 }
-                adapter = new RecyclerViewAdapter(getApplicationContext(), events);
+                adapter = new RecyclerViewAdapter(getApplicationContext(), events,AllEvent.this);
                 mRecyclerView.setAdapter(adapter);
             }
 

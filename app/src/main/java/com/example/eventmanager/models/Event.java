@@ -1,10 +1,12 @@
 package com.example.eventmanager.models;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Event implements Serializable {
-    private String key, eventName, location, startingDate, description, saveEventImage,eventAddedBy,like;
+    private String key, eventName, location, startingDate, description, saveEventImage,eventAddedBy;
     private int timeSpinnerposition;
+    private List<String> likes , comments;
 
     public Event() {
     }
@@ -16,6 +18,14 @@ public class Event implements Serializable {
         this.startingDate=startingDate;
         this.saveEventImage=saveEventImage;
         this.timeSpinnerposition=timeSpinnerposition;
+    }
+
+    public List<String> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<String> likes) {
+        this.likes = likes;
     }
 
     public String getKey() {
@@ -80,5 +90,13 @@ public class Event implements Serializable {
 
     public void setEventAddedBy(String eventAddedBy) {
         this.eventAddedBy = eventAddedBy;
+    }
+
+    public List<String> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<String> comments) {
+        this.comments = comments;
     }
 }

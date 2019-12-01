@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.eventmanager.models.Event;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,8 +41,9 @@ import java.util.GregorianCalendar;
 
 public class EventSelection extends AppCompatActivity {
 
-    private Button save, setImageButton,googleButton;
+    private Button save, setImageButton,googleButton,setVideoButton;
     private ImageView setImageView;
+    private VideoView videoView;
     private EditText editTextEvent, editTextLocation, editTextStart, editTextDescription;
     private Spinner spinnerReminder, spinnerStart;
     private Uri filePath;
@@ -65,6 +67,8 @@ public class EventSelection extends AppCompatActivity {
         spinnerStart=findViewById(R.id.spinner2);
         setImageView=findViewById(R.id.imageViewId);
         googleButton=findViewById(R.id.googleMapId);
+        setVideoButton=findViewById(R.id.setVideoButtonId);
+        videoView=findViewById(R.id.videoViewId);
 
         editTextStart.setText(date);
         editTextDescription=findViewById(R.id.descriptionId);
@@ -84,6 +88,14 @@ public class EventSelection extends AppCompatActivity {
             }
         });
 
+        //Video button
+        setVideoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseVideo();
+            }
+        });
+
         //google Button
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +104,13 @@ public class EventSelection extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void chooseVideo() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), 71);
     }
 
     private void chooseImage() {
@@ -166,6 +185,39 @@ public class EventSelection extends AppCompatActivity {
 
     }
 
+    private void savedVideoEvent(){
+
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference ref = database.getReference("users/"+ EventActivity.firebaseUser.getUid()+"/events").push().getRef();
+
+
+
+        ref.setValue(new Event(editTextEvent.getText().toString(),editTextLocation.getText().toString(),editTextStart.getText().toString(),spinnerStart.getSelectedItemPosition() ,editTextDescription.getText().toString(),"No"))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        if(filePath!=null)
+                        {saveVideo(ref);}
+
+
+                        else{ Toast.makeText(getApplicationContext(), "Event is added.",
+                                Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(getApplicationContext(),MyEvent.class);
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -176,6 +228,38 @@ public class EventSelection extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), filePath);
                 setImageView.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        if (requestCode == 1020) {
+            try {
+                if (data != null && data.getStringExtra(MapUtility.ADDRESS) != null) {
+                    String address = data.getStringExtra(MapUtility.ADDRESS);
+                    double currentLatitude = data.getDoubleExtra(MapUtility.LATITUDE, 0.0);
+                    double currentLongitude = data.getDoubleExtra(MapUtility.LONGITUDE, 0.0);
+                    editTextLocation.setText(address);
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+    }
+
+    public void onActivityVideoResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == 71 && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            filePath = data.getData();
+            try {
+                Uri bitmap = MediaStore.Video.Media.getContentUri(getApplicationContext().toString(), filePath);
+                videoView.setVideoURI(bitmap)Bitmap(bitmap);
             }
             catch (IOException e)
             {
@@ -252,6 +336,64 @@ public class EventSelection extends AppCompatActivity {
                             double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
                                     .getTotalByteCount());
                           //  progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+    }
+
+    private void saveVideo(final DatabaseReference ref) {
+
+        if(filePath != null)
+        {
+            storage = FirebaseStorage.getInstance("gs://event-manager-4feb6.appspot.com");
+            storageReference = storage.getReference();
+
+
+            final StorageReference sRef = storageReference.child("videos/"+ ref.getKey());
+            sRef.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    ref.child("saveEventVideo").setValue(uri.toString())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(getApplicationContext(), "Event is added",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    Intent intent=new Intent(getApplicationContext(),MyEvent.class);
+                                                    startActivity(intent);
+
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(),
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            });
+
+                            // progressDialog.dismiss();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //  progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            //  progressDialog.setMessage("Uploaded "+(int)progress+"%");
                         }
                     });
         }

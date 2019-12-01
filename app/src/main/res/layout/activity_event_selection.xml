@@ -41,13 +41,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Details"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="Details" />
     <EditText
         android:id="@+id/EventNameId"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:hint="Event name"
 
         />
@@ -111,23 +111,44 @@
 
         <ImageView
             android:id="@+id/imageViewId"
-            android:layout_width="0dp"
-            android:layout_height="200dp"
-            android:layout_weight="3"
+            android:layout_width="239dp"
+            android:layout_height="match_parent"
             android:layout_marginRight="10dp"
+            android:layout_weight="2"
 
             />
-        <Button
-            android:id="@+id/setImageButtonId"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:text="Set Image"
-            android:gravity="center"
-            android:textAllCaps="false"
-            android:layout_gravity="center"
 
-            />
+        <VideoView
+            android:id="@+id/videoViewId"
+            android:layout_width="239dp"
+            android:layout_height="144dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="2" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/setImageButtonId"
+                android:layout_width="98dp"
+                android:layout_height="62dp"
+                android:layout_weight="1"
+                android:text="Set Image"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/setVideoButtonId"
+                android:layout_width="98dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:text="Set Video"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+
 
 
     </LinearLayout>

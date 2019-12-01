@@ -56,49 +56,56 @@
             android:adjustViewBounds="true"
             android:background="@drawable/bg"
             />
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    >
 
-    <Button
-        android:id="@+id/editButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Edit"
-        android:textAllCaps="false"
-        />
-    <Button
-        android:id="@+id/deleteButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="delete"
-        android:textAllCaps="false"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="1dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/likeButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Like"
-        android:textAllCaps="false"
-        android:layout_marginLeft="1dp"/>
-    <Button
-        android:id="@+id/commentButtonId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="comment"
-        android:textAllCaps="false"
-        android:layout_marginTop="40dp"
-        />
+            <Button
+                android:id="@+id/editButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="Edit"
+                android:textAllCaps="false" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/deleteButtonId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="40dp"
+                android:text="delete"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/likeButtonId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="1dp"
+                android:text="Like"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/commentButtonId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginTop="40dp"
+                android:text="comment"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/commentsTextId"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            />
 
 </LinearLayout>
 <LinearLayout
@@ -117,7 +124,10 @@
         android:text="Share"
         android:textAllCaps="false" />
 
+
 </LinearLayout>
+
+
 
 
 

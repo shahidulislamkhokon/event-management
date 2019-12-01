@@ -71,7 +71,7 @@ public class MyEvent extends AppCompatActivity {
                         }
                     }
                 }
-                adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent,MyEvent.this);
                 mRecyclerView.setAdapter(adapter);
                 return false;
             }
@@ -82,7 +82,7 @@ public class MyEvent extends AppCompatActivity {
                 {
                     List<Event> filteredEvent = new ArrayList<>();
                     filteredEvent.addAll(events);
-                    adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent);
+                    adapter = new RecyclerViewAdapter(getApplicationContext(), filteredEvent,MyEvent.this);
                     mRecyclerView.setAdapter(adapter);
                 }
                 return false;
@@ -107,11 +107,25 @@ public class MyEvent extends AppCompatActivity {
                             Event event = eventSnap.getValue(Event.class);
                             event.setKey(eventSnap.getKey());
                             event.setEventAddedBy(EventActivity.firebaseUser.getUid());
+                            List<String> likes = new ArrayList<>();
+                            for (DataSnapshot likeId : eventSnap.child("likes").getChildren()) {
+                                String likedUserId = likeId.getValue(String.class);
+                                likes.add(likedUserId);
+                            }
+                            event.setLikes(likes);
+
+                            List<String> comments = new ArrayList<>();
+                            for (DataSnapshot commentId : eventSnap.child("comments").getChildren()) {
+                                String commentsUserId = commentId.getValue(String.class);
+                                comments.add(commentsUserId);
+                            }
+                            event.setComments(comments);
+
                             events.add(event);
                         }
                     }
                 }
-                adapter = new RecyclerViewAdapter(getApplicationContext(), events);
+                adapter = new RecyclerViewAdapter(getApplicationContext(), events,MyEvent.this);
                 mRecyclerView.setAdapter(adapter);
             }
 
@@ -123,5 +137,6 @@ public class MyEvent extends AppCompatActivity {
         });
 
     }
+
 
 }
