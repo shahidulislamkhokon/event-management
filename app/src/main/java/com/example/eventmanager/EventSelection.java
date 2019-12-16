@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -45,8 +46,8 @@ public class EventSelection extends AppCompatActivity {
     private ImageView setImageView;
     private VideoView videoView;
     private EditText editTextEvent, editTextLocation, editTextStart, editTextDescription;
-    private Spinner spinnerReminder, spinnerStart;
-    private Uri filePath;
+    private Spinner  spinnerStart;
+    private Uri filePath, videoFilePath;
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
@@ -69,6 +70,11 @@ public class EventSelection extends AppCompatActivity {
         googleButton=findViewById(R.id.googleMapId);
         setVideoButton=findViewById(R.id.setVideoButtonId);
         videoView=findViewById(R.id.videoViewId);
+
+        //control video
+        MediaController controller=new MediaController(this);
+        controller.setAnchorView(videoView);
+        videoView.setMediaController(controller);
 
         editTextStart.setText(date);
         editTextDescription=findViewById(R.id.descriptionId);
@@ -110,7 +116,7 @@ public class EventSelection extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Video"), 71);
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), 3);
     }
 
     private void chooseImage() {
@@ -160,12 +166,21 @@ public class EventSelection extends AppCompatActivity {
 
 
 
-            ref.setValue(new Event(editTextEvent.getText().toString(),editTextLocation.getText().toString(),editTextStart.getText().toString(),spinnerStart.getSelectedItemPosition() ,editTextDescription.getText().toString(),"No"))
+            ref.setValue(new Event(editTextEvent.getText().toString(),editTextLocation.getText().toString(),editTextStart.getText().toString(),spinnerStart.getSelectedItemPosition() ,editTextDescription.getText().toString(),"No","No"))
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                            if(filePath!=null)
-                           {saveImage(ref);}
+                           {
+                               saveImage(ref);
+
+                           }
+
+                           if(videoFilePath!=null)
+                           {
+                               saveVideo(ref);
+                           }
+
 
 
                            else{ Toast.makeText(getApplicationContext(), "Event is added.",
@@ -185,7 +200,7 @@ public class EventSelection extends AppCompatActivity {
 
     }
 
-    private void savedVideoEvent(){
+   /** private void savedVideoEvent(){
 
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -216,7 +231,7 @@ public class EventSelection extends AppCompatActivity {
                     }
                 });
 
-    }
+    }**/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -235,37 +250,6 @@ public class EventSelection extends AppCompatActivity {
             }
         }
 
-        if (requestCode == 1020) {
-            try {
-                if (data != null && data.getStringExtra(MapUtility.ADDRESS) != null) {
-                    String address = data.getStringExtra(MapUtility.ADDRESS);
-                    double currentLatitude = data.getDoubleExtra(MapUtility.LATITUDE, 0.0);
-                    double currentLongitude = data.getDoubleExtra(MapUtility.LONGITUDE, 0.0);
-                    editTextLocation.setText(address);
-
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-    }
-
-    public void onActivityVideoResult(int requestCode, int resultCode, Intent data) {
-
-        if(requestCode == 71 && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
-            filePath = data.getData();
-            try {
-                Uri bitmap = MediaStore.Video.Media.getContentUri(getApplicationContext().toString(), filePath);
-                videoView.setVideoURI(bitmap)Bitmap(bitmap);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
 
         if (requestCode == 1020) {
             try {
@@ -281,7 +265,23 @@ public class EventSelection extends AppCompatActivity {
             }
         }
 
+        if (requestCode == 3) {
+            try {
+                //String videoPath = ;
+                videoFilePath=data.getData();
+                videoView.setVideoURI(data.getData());
+                videoView.seekTo(1);
+                videoView.start();
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
+
+
 
     private void saveImage(final DatabaseReference ref) {
 
@@ -305,8 +305,7 @@ public class EventSelection extends AppCompatActivity {
                                                 public void onSuccess(Void aVoid) {
                                                     Toast.makeText(getApplicationContext(), "Event is added",
                                                             Toast.LENGTH_SHORT).show();
-                                                    Intent intent=new Intent(getApplicationContext(),MyEvent.class);
-                                                    startActivity(intent);
+
 
                                                 }
                                             })
@@ -343,14 +342,14 @@ public class EventSelection extends AppCompatActivity {
 
     private void saveVideo(final DatabaseReference ref) {
 
-        if(filePath != null)
+        if(videoFilePath != null)
         {
             storage = FirebaseStorage.getInstance("gs://event-manager-4feb6.appspot.com");
             storageReference = storage.getReference();
 
 
             final StorageReference sRef = storageReference.child("videos/"+ ref.getKey());
-            sRef.putFile(filePath)
+            sRef.putFile(videoFilePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

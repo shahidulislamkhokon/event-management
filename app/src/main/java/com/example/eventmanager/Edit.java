@@ -18,9 +18,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.eventmanager.models.Event;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,12 +40,13 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 public class Edit extends AppCompatActivity {
-    Button editSaveButton, editGoogleMapButton,editSetImageButton;
+    Button editSaveButton, editGoogleMapButton,editSetImageButton,editVideoButton;
     EditText editEventName, editLocation, editDescription, editEventDate;
     Spinner editSpinner;
     ImageView editSetImage;
+    VideoView videoView;
     Event event;
-    private Uri filePath;
+    private Uri filePath,videoFilePath;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     @Override
@@ -57,13 +60,20 @@ public class Edit extends AppCompatActivity {
 
        editSaveButton=findViewById(R.id.EditsaveButton);
        editGoogleMapButton=findViewById(R.id.EditGoogleMapId);
-       editSetImageButton=findViewById(R.id.EditsetImageButtonId);
-       editSetImage=findViewById(R.id.EditimageViewId);
+       editSetImageButton=findViewById(R.id.setImageEditButtonId);
+       editSetImage=findViewById(R.id.setEditImageId);
        editEventName=findViewById(R.id.EditEventNameId);
        editLocation=findViewById(R.id.EditlocationId);
        editDescription=findViewById(R.id.EditdescriptionId);
        editEventDate=findViewById(R.id.EditEventDateId);
        editSpinner=findViewById(R.id.Editspinner);
+       editVideoButton=findViewById(R.id.setVideoEdittButtonId);
+       videoView=findViewById(R.id.videoEditViewId);
+
+        //control video
+        MediaController controller=new MediaController(this);
+        controller.setAnchorView(videoView);
+        videoView.setMediaController(controller);
 
 
        editEventName.setText(event.getEventName());
@@ -92,6 +102,13 @@ public class Edit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 chooseImage();
+            }
+        });
+
+        editVideoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseVideo();
             }
         });
 
@@ -145,6 +162,13 @@ public class Edit extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 71);
     }
 
+    private void chooseVideo() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), 3);
+    }
+
     private void saveEditEvent() {
 
 
@@ -163,7 +187,15 @@ public class Edit extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             if(filePath!=null)
-                            {saveImage(ref);}
+                            {
+                                saveImage(ref);
+                            }
+
+                            if(videoFilePath!=null)
+                            {
+                                saveVideo(ref);
+                            }
+
 
                             else{ Toast.makeText(getApplicationContext(), "Event is added.",
                                     Toast.LENGTH_SHORT).show();
@@ -214,6 +246,19 @@ public class Edit extends AppCompatActivity {
             }
         }
 
+        if (requestCode == 3) {
+            try {
+                //String videoPath = ;
+                videoView.setVideoURI(data.getData());
+                videoView.seekTo(1);
+                videoView.start();
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     private void saveImage(final DatabaseReference ref) {
@@ -223,9 +268,6 @@ public class Edit extends AppCompatActivity {
             storage = FirebaseStorage.getInstance("gs://event-manager-4feb6.appspot.com");
             storageReference = storage.getReference();
 
-            //final ProgressDialog progressDialog = new ProgressDialog(getApplicationContext());
-            // progressDialog.setTitle("Uploading...");
-            // progressDialog.show();
 
             final StorageReference sRef = storageReference.child("images/"+ ref.getKey());
             sRef.putFile(filePath)
@@ -276,5 +318,64 @@ public class Edit extends AppCompatActivity {
                     });
         }
     }
+
+    private void saveVideo(final DatabaseReference ref) {
+
+        if(videoFilePath != null)
+        {
+            storage = FirebaseStorage.getInstance("gs://event-manager-4feb6.appspot.com");
+            storageReference = storage.getReference();
+
+
+            final StorageReference sRef = storageReference.child("videos/"+ ref.getKey());
+            sRef.putFile(videoFilePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            sRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    ref.child("saveEventVideo").setValue(uri.toString())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(getApplicationContext(), "Event is added",
+                                                            Toast.LENGTH_SHORT).show();
+                                                    Intent intent=new Intent(getApplicationContext(),MyEvent.class);
+                                                    startActivity(intent);
+
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(),
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                }
+                            });
+
+                            // progressDialog.dismiss();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //  progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                                    .getTotalByteCount());
+                            //  progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                        }
+                    });
+        }
+    }
+
 
 }

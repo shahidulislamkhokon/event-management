@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.MediaController;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -99,6 +100,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
             Log.d("Error","Invalid Image");
         }
 
+        try{
+            if(event.getSaveEventVideo()!=null && !event.getSaveEventVideo().equals(" "))
+            {
+                //control video
+                MediaController controller=new MediaController(activity);
+                controller.setAnchorView(holder.videoView);
+                holder.videoView.setMediaController(controller);
+
+                Log.d("VideoUrl",event.getEventName()+"  "+event.getSaveEventVideo());
+                holder.videoView.setVideoPath(event.getSaveEventVideo());
+                holder.videoView.seekTo(2);
+                holder.videoView.start();
+
+            }
+
+        }catch (Exception ex)
+        {
+           // holder.eventImage.setImageDrawable(this.context.getResources().getDrawable(R.drawable.evetn_manager_icon,null));
+            Log.d("Error","Invalid Video");
+        }
+
         holder.title.setText(event.getEventName() == null ? "" : event.getEventName());
         holder.startTime.setText(context.getResources().getStringArray(R.array.time_arrays)[event.getTimeSpinnerposition()]);
         holder.eventLocation.setText(event.getLocation() == null ? "" : event.getLocation());
@@ -121,7 +143,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<ViewHolder> {
                 Intent sendIntent = new Intent();
                 //sendIntent.putExtra("event",event);
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, event.getEventName()+"\n"+event.getDescription()+"\n"+event.getLocation()+"\n"+event.getStartingDate()+"\n"+event.getSaveEventImage());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, event.getEventName()+"\n"+event.getDescription()+"\n"+event.getLocation()+"\n"+event.getStartingDate()+"\n"+event.getSaveEventImage()+"\n\n"+event.getSaveEventVideo());
                 sendIntent.setType("text/plain");
 
                 Intent i = Intent.createChooser(sendIntent,"Share with");

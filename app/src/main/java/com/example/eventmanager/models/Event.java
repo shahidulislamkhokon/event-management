@@ -4,19 +4,20 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Event implements Serializable {
-    private String key, eventName, location, startingDate, description, saveEventImage,eventAddedBy;
+    private String key, eventName, location, startingDate, description, saveEventImage,eventAddedBy,saveEventVideo;
     private int timeSpinnerposition;
     private List<String> likes , comments;
 
     public Event() {
     }
 
-    public Event(String eventName, String location, String startingDate,int timeSpinnerposition,String description, String saveEventImage) {
+    public Event(String eventName, String location, String startingDate,int timeSpinnerposition,String description, String saveEventImage,String saveEventVideo) {
         this.eventName = eventName;
         this.description = description;
         this.location=location;
         this.startingDate=startingDate;
         this.saveEventImage=saveEventImage;
+        this.saveEventVideo=saveEventVideo;
         this.timeSpinnerposition=timeSpinnerposition;
     }
 
@@ -82,6 +83,13 @@ public class Event implements Serializable {
 
     public void setSaveEventImage(String saveEventImage) {
         this.saveEventImage = saveEventImage;
+    }
+    public String getSaveEventVideo() {
+        return saveEventVideo;
+    }
+
+    public void setSaveEventVideo(String saveEventVideo) {
+        this.saveEventVideo = saveEventVideo;
     }
 
     public String getEventAddedBy() {

@@ -110,10 +110,12 @@
         android:weightSum="4">
 
         <ImageView
+            android:background="#fff"
             android:id="@+id/imageViewId"
             android:layout_width="239dp"
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
+            android:autofillHints="set image"
             android:layout_weight="2"
 
             />
@@ -123,6 +125,7 @@
             android:layout_width="239dp"
             android:layout_height="144dp"
             android:layout_marginRight="10dp"
+            android:autofillHints="set video"
             android:layout_weight="2" />
 
         <LinearLayout
