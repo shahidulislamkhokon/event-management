@@ -150,12 +150,7 @@ public class  AllEvent extends AppCompatActivity {
                 mRecyclerView.setAdapter(adapter);
             }
 		
-		VideoView videoview = (VideoView) findViewById(R.id.videoview);
 
-		 uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.splash);
-
-		videoview.setVideoURI(uri);
-		videoview.start();
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
